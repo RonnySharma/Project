@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Project_Model.Order>
+@{
+    ViewData["Title"] = "Allorder";
+}
+<div class="row">
+
+   
+   <div class="box-tools pull-right">
+      @*  @using (Html.BeginForm("Allorder", "Home", FormMethod.Get))
+        {
+            <span>State Date</span><input type="date" name="start"/>
+            <span>State Date</span><input type="date" name="end"/>
+            <input type="submit" value="Get Reco"/>
+        }*@
+
+        @using (Html.BeginForm("FilterOrders", "Home", FormMethod.Get))
+        {
+            <label>Start Date:</label>
+            <input type="date" name="startDate" required>
+
+            <label>End Date:</label>
+            <input type="date" name="endDate" required>
+
+            <button type="submit">Filter Orders</button>
+        }
+        <form action="@Url.Action("Allorder")">
+        <label for="SearchData">date</label>
+            <input type="date" id="searchdate" name="searchdate" class="form-control" />
+
+            <button type="submit" value="Get Reco">search</button>
+        </form>
+    </div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            
+            <th>orderTotal</th>
+            <th>Date</th>
+            <th>PhoneNumber</th>
+            <th>state</th>
+            <th>City</th>
+            <th>pay</th>
+            
+        </tr>
+    </thead>
+    @foreach(var love in Model)
+    {
+        <tbody>
+        <tr>
+           
+            <td>@love.Id</td>
+            <td>@love.Name</td>
+            
+            <td>@love.orderTotal</td>
+                <th>@love.OrderData</th>
+                <td>@love.PhoneNumber</td>
+                <td>@love.state</td>
+                <td>@love.City</td>
+                <td>@love.OrderStatus</td>
+                    <td>
+                        <a href="@Url.Action("Details", "Home", new { id = love.Id })">Details</a>
+                       <a href="@Url.Action("Cancel", "Home", new { id = love.Id })">Cancel</a>
+@*                        <form asp-controller="home" asp-action="Cancel"  method="post" >
+                <input type="hidden" name="orderId" />
+                <button type="submit">Cancel</button>*@
+          @*  </form>*@
+                       
+                    </td>
+
+        </tr>
+    </tbody>
+    }
+    
+    
+    
+</table>
+</div>

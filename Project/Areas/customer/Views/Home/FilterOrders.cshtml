@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Project_Model.Order>
+@{
+    ViewData["Title"] = "FilterOrders";
+}
+
+<h1>FilterOrders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+
+            <th>orderTotal</th>
+            <th>Date</th>
+            <th>PhoneNumber</th>
+            <th>state</th>
+            <th>City</th>
+            <th>pay</th>
+
+        </tr>
+    </thead>
+    @foreach (var love in Model)
+    {
+        <tbody>
+            <tr>
+
+                <td>@love.Id</td>
+                <td>@love.Name</td>
+
+                <td>@love.orderTotal</td>
+                <th>@love.OrderData</th>
+                <td>@love.PhoneNumber</td>
+                <td>@love.state</td>
+                <td>@love.City</td>
+                <td>@love.OrderStatus</td>
+                <td>
+                    <a href="@Url.Action("Details", "Home", new { id = love.Id })">Details</a>
+                    <a href="@Url.Action("Cancel", "Home", new { id = love.Id })">Cancel</a>
+                    @*                        <form asp-controller="home" asp-action="Cancel"  method="post" >
+                <input type="hidden" name="orderId" />
+                <button type="submit">Cancel</button>*@
+                    @*  </form>*@
+
+                </td>
+
+            </tr>
+        </tbody>
+    }
+
+
+
+</table>
+</div>
