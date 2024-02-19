@@ -2,15 +2,14 @@
     <div class="col-9">
         <h2>CategoryList</h2>
     </div>
-        <div class="col-3">
-            <a asp-action="upsert" class="btn btn-info ">
-                <i class="fas fa-plus"></i>&nbsp; category</a>
-       
+    <div class="col-3">
+        <a asp-action="upsert" class="btn btn-info">
+            <i class="fas fa-plus"></i>&nbsp; category
+        </a>
     </div>
-
 </div>
 <div class="border m-2 p-2">
-    <table id="tblData" class="table  table-bordered table-striped table-active">
+    <table id="tbldata" class="table table-bordered table-striped table-active">
         <thead>
             <tr>
                 <th>Name</th>
@@ -19,7 +18,61 @@
         </thead>
     </table>
 </div>
+@* //ya kiya kand *@
 @section scripts
-{
-    <script src="~/js/Category.js"></script>
+    {
+    <script>
+        var dataTable;
+
+        $(document).ready(function () {
+            loadDataTable();
+
+            function loadDataTable() {
+                dataTable = $('#tbldata').DataTable({
+                    "sPaginationType": "full_numbers",
+                    "lengthMenu": [5, 10, 15], // Corrected spelling and syntax for lengthMenu
+                    "ajax": {
+                        "url": "/Adimen/cata/Getall"
+                    },
+                    "columns": [
+                        { "data": "name", "width": "70%" },
+                        {
+                            "data": "id",
+                            "render": function (data) {
+                                return `<div class="text-center">
+                                                    <a href="/Adimen/cata/Upsert/${data}" class="btn btn-info"><i class="fas fa-edit"></i></a>
+                                                    <a class="btn btn-danger" onclick="Delete('/Adimen/cata/delete/${data}')"><i class="fas fa-trash-alt"></i></a>
+                                                </div>`;
+                            }
+                        }
+                    ]
+                });
+            }
+
+            function Delete(url) {
+                swal({
+                    title: "Want to delete data?",
+                    text: "Delete Information",
+                    button: true,
+                    icon: "warning",
+                    dangerMode: true
+                }).then((willdata) => {
+                    if (willdata) {
+                        $.ajax({
+                            url: url,
+                            type: "DELETE",
+                            success: function (data) {
+                                if (data.success) {
+                                    toastr.success(data.message);
+                                    dataTable.ajax.reload();
+                                } else {
+                                    toastr.error(data.message);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    </script>
 }

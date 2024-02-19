@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Humanizer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using NPOI.SS.Formula.Functions;
+using Project_Data_Access.Data;
 using Project_Data_Access.Repository;
 using Project_Model;
 using Project_Model.VIewModel;
@@ -13,7 +16,9 @@ using Project_utility;
 using Stripe.Treasury;
 using System.Configuration;
 using System.Diagnostics;
+using System.Globalization;
 using System.Security.Claims;
+using static NPOI.POIFS.Crypt.CryptoFunctions;
 
 namespace Project.Areas.customer.Controllers
 {
@@ -23,10 +28,12 @@ namespace Project.Areas.customer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly Iunitofwork _unitofwork;
         private readonly IEmailSender _emailSender;
-        public HomeController(ILogger<HomeController> logger, Iunitofwork unitofwork,IEmailSender emailSender)
+        private readonly ApplicationDbContext _context;
+        public HomeController(ILogger<HomeController> logger, Iunitofwork unitofwork,IEmailSender emailSender, ApplicationDbContext context)
         {
             _logger = logger;
             _unitofwork = unitofwork;
+            _context = context;
             _emailSender = emailSender;
         }
         //public ActionResult Index()
@@ -56,42 +63,42 @@ namespace Project.Areas.customer.Controllers
         //[HttpGet]
         //public IActionResult dropdowen()
         //{
-            //var filteredOrders = _dbContext.Orders
-            //    .Where(order => order.OrderDate >= startDate && order.OrderDate <= endDate)
-            //    .ToList();
-            // Get a list of countries and cities
-            //ProductVM productVM = new ProductVM()
-            //{
-            //    Product = new Product(),
+        //var filteredOrders = _dbContext.Orders
+        //    .Where(order => order.OrderDate >= startDate && order.OrderDate <= endDate)
+        //    .ToList();
+        // Get a list of countries and cities
+        //ProductVM productVM = new ProductVM()
+        //{
+        //    Product = new Product(),
 
-               
-            //    cityList = _unitofwork.ciety.Getall().Select(d => new SelectListItem()
-            //    {
-    //                Text = d.Name,
-    //                Value = d.Id.ToString()
-    //            }
-    //             ),
-    //            CountryList = _unitofwork.country.Getall().Select(d => new SelectListItem()
-    //            {
-    //                Text = d.Name,
-    //                Value = d.Id.ToString()
-    //            }
-    //             ),
-    //        };
-            
-    //        return View(productVM);
-           
-        
-    //}
-        
-            //var fdd= _unitofwork.Product.FirstOrDefoult(c=>c.Country.Id==aa && c.City.Id==aa);
-            //var filteredOrders = _dbContext.Orders
-            //    .Where(order => order.OrderDate >= startDate && order.OrderDate <= endDate)
-            //    .ToList();
-            // Get a list of countries and cities
-          
 
-       
+        //    cityList = _unitofwork.ciety.Getall().Select(d => new SelectListItem()
+        //    {
+        //                Text = d.Name,
+        //                Value = d.Id.ToString()
+        //            }
+        //             ),
+        //            CountryList = _unitofwork.country.Getall().Select(d => new SelectListItem()
+        //            {
+        //                Text = d.Name,
+        //                Value = d.Id.ToString()
+        //            }
+        //             ),
+        //        };
+
+        //        return View(productVM);
+
+
+        //}
+
+        //var fdd= _unitofwork.Product.FirstOrDefoult(c=>c.Country.Id==aa && c.City.Id==aa);
+        //var filteredOrders = _dbContext.Orders
+        //    .Where(order => order.OrderDate >= startDate && order.OrderDate <= endDate)
+        //    .ToList();
+        // Get a list of countries and cities
+
+
+
 
 
 
@@ -122,19 +129,67 @@ namespace Project.Areas.customer.Controllers
             return View(the);
         }
 
-       // [HttpGet]
+        // [HttpGet]
         //public IActionResult Cancel(int Id)
         //{
         //  var  Order  = _unitofwork.Order.Getall();
-            
-           
+         [HttpPost]
+        public IActionResult Rodo(int year ,int month)
+        {
+            //var topSellingProducts = _context.Shopingcarts.OrderByDescending(p => p.Count).Take(10).ToList();
+            //     return View(topSellingProducts);
+            if (year < 1 || month < 1 || month > 12)
+            {
+                throw new ArgumentException("Invalid year or month values.");
+            }
 
-          
+            var firstDayOfMonth = new DateTime(year, month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
             
-           
+            var popularProducts = _context.Orders
+                .Where(p => p.OrderData >= firstDayOfMonth && p.OrderData <= lastDayOfMonth)
+                .OrderByDescending(p => p.orderTotal)
+                .Take(5)
+                .ToList();
+
+            ViewBag.SelectedMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+            ViewBag.SelectedYear = year;
+            return View(popularProducts);
+
+            //var topSellingProducts = _context.Orders
+            //.Where(p => p.OrderData.Date == orderDate.Date)
+            //.OrderByDescending(p => p.orderTotal)
+            //.Take(3)
+            //.ToList();
+
+            //ViewBag.SelectedDate = orderDate.Date; // Pass the selected date to the view
+            //return View(topSellingProducts);
+            //var a = _unitofwork.Shopingcart.Getall(a=>a.ApplicationUserId==id);
+            //// Consider orders from the last month
+            //var startDate = DateTime.Now.AddMonths(-1);
+
+            //// Retrieve orders for the specified user within the last month
+            //var orders = _unitofwork.Order
+            //    .Getall(o => o.ApplicationUserId == id && o.OrderData >= startDate)
+            //    .ToList();
+
+            //// Pass the orders to the view
+            //return View(orders);
+        }
+        //[HttpGet]
+        //public IActionResult Rodo(int id)
+        //{
+
+        //    return View();
+        //}
+
+
+
+
+
         //    return View(Order);
         //}
-       // [HttpPost]
+        // [HttpPost]
         public IActionResult Cancel(int id)
         {
             var order = _unitofwork.Order.Getall();

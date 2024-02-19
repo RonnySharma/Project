@@ -2,15 +2,25 @@
 @{
     ViewData["Title"] = "Allorder";
 }
-<div class="row">
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioA1" onclick="getA1Rates()" value="A1" />
+    <label class="form-check-label" for="flexRadioDefaultA1"> A1 </label>
+</div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioA2" value="A2" onclick="getA2Rates()" />
+    <label class="form-check-label" for="flexRadioDefaultA2"> A2 </label>
+</div>
 
-   
-   <div class="box-tools pull-right">
-      @*  @using (Html.BeginForm("Allorder", "Home", FormMethod.Get))
+<div class="row" id="result-container">
+
+
+
+    <div class="box-tools pull-right">
+        @*  @using (Html.BeginForm("Allorder", "Home", FormMethod.Get))
         {
-            <span>State Date</span><input type="date" name="start"/>
-            <span>State Date</span><input type="date" name="end"/>
-            <input type="submit" value="Get Reco"/>
+        <span>State Date</span><input type="date" name="start"/>
+        <span>State Date</span><input type="date" name="end"/>
+        <input type="submit" value="Get Reco"/>
         }*@
 
         @using (Html.BeginForm("FilterOrders", "Home", FormMethod.Get))
@@ -24,7 +34,7 @@
             <button type="submit">Filter Orders</button>
         }
         <form action="@Url.Action("Allorder")">
-        <label for="SearchData">date</label>
+            <label for="SearchData">date</label>
             <input type="date" id="searchdate" name="searchdate" class="form-control" />
 
             <button type="submit" value="Get Reco">search</button>
@@ -46,23 +56,23 @@
             
         </tr>
     </thead>
-    @foreach(var love in Model)
+    @foreach(var Item in Model)
     {
         <tbody>
         <tr>
-           
-            <td>@love.Id</td>
-            <td>@love.Name</td>
-            
-            <td>@love.orderTotal</td>
-                <th>@love.OrderData</th>
-                <td>@love.PhoneNumber</td>
-                <td>@love.state</td>
-                <td>@love.City</td>
-                <td>@love.OrderStatus</td>
+
+                    <td>@Item.Id</td>
+                    <td>@Item.Name</td>
+
+                    <td>@Item.orderTotal</td>
+                    <th>@Item.OrderData</th>
+                    <td>@Item.PhoneNumber</td>
+                    <td>@Item.state</td>
+                    <td>@Item.City</td>
+                    <td>@Item.OrderStatus</td>
                     <td>
-                        <a href="@Url.Action("Details", "Home", new { id = love.Id })">Details</a>
-                       <a href="@Url.Action("Cancel", "Home", new { id = love.Id })">Cancel</a>
+                        <a href="@Url.Action("Details", "Home", new { id = Item.Id })">Details</a>
+                        <a href="@Url.Action("Cancel", "Home", new { id = Item.Id })">Cancel</a>
 @*                        <form asp-controller="home" asp-action="Cancel"  method="post" >
                 <input type="hidden" name="orderId" />
                 <button type="submit">Cancel</button>*@
@@ -78,3 +88,39 @@
     
 </table>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function getA1Rates() {
+        $.ajax({
+            type: "Post",
+            url: "/Customer/Home/Rodo/",
+            data: { year: 2024, month: 1 },
+            dataType: "html",
+            success: function (result) {
+                // Update a specific element with the response
+                $("#result-container").html(result);
+                alert("success");
+            },
+            error: function () {
+                alert("failed");
+            }
+        });
+    }
+
+
+
+    // function getA2Rates() {
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/Customer/Home/Rodo/", // Change 'URL' to 'url'
+    //         data: { id: $('#flexRadioA2').val() },
+    //         dataType: "json",
+    //         success: function (result) {
+    //             alert("success");
+    //         },
+    //         error: function () {
+    //             alert("failed");
+    //         }
+    //     });
+    // }
+</script>
