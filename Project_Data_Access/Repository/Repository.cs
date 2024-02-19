@@ -52,6 +52,8 @@ namespace Project_Data_Access.Repository
             return DbSet.Find(Id);
         }
 
+      
+
         public IEnumerable<T> Getall(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IOrderedQueryable<T>> orderby = null, string includeProperties = null)
         {
             IQueryable<T> query = DbSet;

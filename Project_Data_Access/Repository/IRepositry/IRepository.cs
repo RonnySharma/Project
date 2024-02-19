@@ -15,6 +15,7 @@ namespace Project_Data_Access.Repository
         void Remove(int id);
         void update(T entity);//update
         void RemoveRange(IEnumerable<T> entity);//find
+
         T get(int Id);
         IEnumerable<T> Getall(
             Expression<Func<T,bool>>filter=null,    

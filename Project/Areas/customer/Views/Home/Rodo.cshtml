@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Project_Model.Order> 
+
+<h2>Top Selling Products</h2>
+
+<table class="table" >
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Date</th>
+       
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.orderTotal</td>
+             <td>@product.OrderData</td>
+            </tr>
+        }
+    </tbody>
+</table>

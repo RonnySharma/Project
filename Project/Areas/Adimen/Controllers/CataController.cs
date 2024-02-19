@@ -49,7 +49,7 @@ namespace Project.Areas.Adimen.Controllers
        
         #region APIs
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll(int? id)
         {
             var categoryList = _unitofwork.catagory.Getall();
             return Json(new { data = categoryList });

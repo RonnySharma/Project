@@ -19,20 +19,20 @@
 
             </tr>
         </thead>
-        @foreach (var love in Model)
+        @foreach (var Item in Model)
         {
             <tbody>
                 <tr>
 
-                    <td>@love.Id</td>
-                    <td>@love.Name</td>
+                    <td>@Item.Id</td>
+                    <td>@Item.Name</td>
 
-                    <td>@love.orderTotal</td>
-                    <th>@love.OrderData</th>
-                    <td>@love.PhoneNumber</td>
-                    <td>@love.state</td>
-                    <td>@love.City</td>
-                    <td>@love.OrderStatus</td>
+                    <td>@Item.orderTotal</td>
+                    <th>@Item.OrderData</th>
+                    <td>@Item.PhoneNumber</td>
+                    <td>@Item.state</td>
+                    <td>@Item.City</td>
+                    <td>@Item.OrderStatus</td>
                     <td>
                       @*  <a href="@Url.Action("Details", "Home", new { id = love.Id })">Details</a>
                         <a href="@Url.Action("Cancel", "Home", new { id = love.Id })">Details</a>
