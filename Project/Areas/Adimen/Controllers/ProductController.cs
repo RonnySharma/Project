@@ -34,6 +34,8 @@ namespace Project.Areas.Adimen.Controllers
                 catalist = _unitofwork.catagory.Getall().Select(cl => new SelectListItem()
                 {
                     Text = cl.Name,
+           
+                    
                     Value = cl.Id.ToString()
                 }),
                 covertypeList = _unitofwork.Covertype.Getall().Select(ct => new SelectListItem()
@@ -51,7 +53,7 @@ namespace Project.Areas.Adimen.Controllers
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public IActionResult upsert(ProductVM productVM)
-        {
+        {   
             if (!ModelState.IsValid)
             {
                 var webRootPath = _webHostEnvironment.WebRootPath;
