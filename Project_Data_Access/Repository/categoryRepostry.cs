@@ -15,5 +15,12 @@ public categoryRepostry(ApplicationDbContext context) : base(context)
         {
             _context = context;
         }
+
+      
+
+        public IEnumerable<catagory> Select(Func<object, catagory> selector)
+        {
+            return _context.Categries.Select(selector);
+        }
     }
 }

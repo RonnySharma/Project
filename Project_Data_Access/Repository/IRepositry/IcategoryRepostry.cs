@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Project_Data_Access.Repository
 {
-    public interface IcategoryRepostry:IRepository<catagory>
+    public interface IcategoryRepostry : IRepository<catagory>
     {
+        IEnumerable<catagory> Select(Func<object, catagory> selector);
     }
 }

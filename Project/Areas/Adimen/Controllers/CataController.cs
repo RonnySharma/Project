@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Nest;
 using Project_Data_Access.Repository;
 using Project_Model;
+using Project_Model.VIewModel;
 using Project_utility;
 
 namespace Project.Areas.Adimen.Controllers
@@ -20,6 +23,41 @@ namespace Project.Areas.Adimen.Controllers
         {
             return View();
         }
+        public IActionResult Index1(int currentPage = 1,string term="",string orderby="")
+        {
+            int pageSize = 5;
+
+            // Initialize the ViewModel
+            CategoryVM categoryVM = new CategoryVM()
+            {
+                Catagory = new catagory(),
+                CatagoriesList = _unitofwork.catagory.Getall()
+                                    .Select(c => new SelectListItem
+                                    {
+                                        Text = c.Name,
+                                        Value = c.Id.ToString()
+                                    })
+                                    .Skip((currentPage - 1) * pageSize)
+                                    .Take(pageSize)
+                                    .ToList()
+            };
+
+            // Count the total number of categories
+            int totalRecords = _unitofwork.catagory.Getall().Count();
+            int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            // Pass the ViewModel, the total count, total pages, and current page to the view
+           categoryVM.CurrentPage = currentPage;
+            categoryVM.TotalPage= totalPages;
+            categoryVM.Term= term;
+            categoryVM.Orderby= orderby;
+            categoryVM.PageSize = pageSize;
+
+
+            return View(categoryVM);
+        }
+
+
         public IActionResult upsert(int? id)
 
         {
