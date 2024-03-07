@@ -3,7 +3,7 @@
     ViewData["Title"] = "Allorder";
 }
 
-<div class="row" id="result">
+<div class="row" id="table-container">
     <table class="table">
         <thead>
             <tr>
@@ -22,50 +22,54 @@
         </tbody>
     </table>
 
-    <nav class="Page">
-        <ul class="text-danger">
+    <div class="Page" id="pagination-container">
+        <div class="pagination">
             @if (Model.CurrentPage > 1)
             {
                 <li class="page-item">
-                    <a class="page-link" onclick="Pagesss(1)">Previous</a>
+                    <a class="page-link" onclick="navigateToPage(1)">Previous</a>
                 </li>
             }
             @for (int i = 1; i <= Model.TotalPage; i++)
             {
                 <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                    <a class="page-item" onclick="Pagesss(@i)">@i</a>
+                    <a class="page-link" onclick="navigateToPage(@i)">@i</a>
                 </li>
             }
             @if (Model.CurrentPage < Model.TotalPage)
             {
                 <li class="page-item">
-                    <a class="page-link" onclick="Pagesss(@(Model.CurrentPage + 1))">Next</a>
+                    <a class="page-link" onclick="navigateToPage(@(Model.CurrentPage + 1))">Next</a>
                 </li>
             }
-        </ul>
-    </nav>
-
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        </div>
+    </div>
+    @* pangbosada *@
     <script>
-        function Pagesss(p1) {
-            // Move event.preventDefault() outside the data parameter
-            event.preventDefault();
+        function navigateToPage(pageNumber) {
+            debugger;
 
             $.ajax({
-                url: '/Adimen/cata/Index1',
+                url: '/Adimen/cata/pageing',
                 type: 'GET',
                 data: {
                     term: '@Model.Term',
                     oorderby: '@Model.Orderby',
-                    currentPa: p1
+                    currentPage: pageNumber
                 },
                 success: function (result) {
-                    $('#result').html(result);
+                    debugger;
+                    $('#table-container').html($(result).find('#table-container').html());
+                    $('#pagination-container').html($(result).find('#pagination-container').html());
                 },
+
                 error: function (error) {
                     console.log(error);
                 }
             });
+
+            // Disable the default link behavior
+            return true;
         }
     </script>
-</div>
+

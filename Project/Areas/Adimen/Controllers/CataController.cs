@@ -23,8 +23,9 @@ namespace Project.Areas.Adimen.Controllers
         {
             return View();
         }
-        public IActionResult Index1(int currentPage = 1,string term="",string orderby="")
+        public IActionResult pageing(int CurrentPage = 1,string term="",string orderby="")
         {
+            
             int pageSize = 5;
 
             // Initialize the ViewModel
@@ -37,7 +38,7 @@ namespace Project.Areas.Adimen.Controllers
                                         Text = c.Name,
                                         Value = c.Id.ToString()
                                     })
-                                    .Skip((currentPage - 1) * pageSize)
+                                    .Skip((CurrentPage - 1) * pageSize)
                                     .Take(pageSize)
                                     .ToList()
             };
@@ -47,7 +48,7 @@ namespace Project.Areas.Adimen.Controllers
             int totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
             // Pass the ViewModel, the total count, total pages, and current page to the view
-           categoryVM.CurrentPage = currentPage;
+           categoryVM.CurrentPage = CurrentPage;
             categoryVM.TotalPage= totalPages;
             categoryVM.Term= term;
             categoryVM.Orderby= orderby;
@@ -56,6 +57,7 @@ namespace Project.Areas.Adimen.Controllers
 
             return View(categoryVM);
         }
+
 
 
         public IActionResult upsert(int? id)

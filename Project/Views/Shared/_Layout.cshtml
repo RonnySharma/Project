@@ -18,6 +18,7 @@
 
 </head>
 <body>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-primary border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -35,7 +36,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Adimen" asp-controller="Cata" asp-action="Index1">Index1</a>
+                            <a class="nav-link text-dark" asp-area="Adimen" asp-controller="Cata" asp-action="pageing">Index1</a>
                         </li>
                        @*  <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="customer" asp-controller="Home" asp-action="dropdowen">dropdowen</a>
@@ -101,6 +102,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @RenderSection("Navbar", required: false)
             @RenderBody()
         </main>
     </div>
